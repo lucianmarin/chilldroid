@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -191,16 +192,20 @@ private fun CurrentSongInfoPanel(
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (showCover) {
+            val isDark = isSystemInDarkTheme()
+            val placeholderBackground = ChilltraxTheme.visualizerBackground(isDark)
+            val placeholderNoteTint = ChilltraxTheme.visualizerContrastColor(isDark)
+
             // 60x60 dp Album Artwork with `music_note_2` replacing the Apple logo
             Box(
                 modifier = Modifier
                     .size(60.dp)
                     .shadow(4.dp, RoundedCornerShape(10.dp))
                     .clip(RoundedCornerShape(10.dp))
-                    .background(Color.Black)
+                    .background(placeholderBackground)
                     .border(
                         width = 1.dp,
-                        color = Color.White.copy(alpha = 0.14f),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.14f),
                         shape = RoundedCornerShape(10.dp)
                     )
                     .clickable(enabled = canOpenAppleMusic, onClick = onOpenAppleMusic),
@@ -233,7 +238,10 @@ private fun CurrentSongInfoPanel(
                     }
                 } else {
                     // Default station artwork rendered from icon.svg + Music Note 2 icon replacing Apple logo
-                    ChilltraxIconSvgCanvas(modifier = Modifier.fillMaxSize())
+                    ChilltraxIconSvgCanvas(
+                        modifier = Modifier.fillMaxSize(),
+                        isDark = isDark
+                    )
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -243,7 +251,7 @@ private fun CurrentSongInfoPanel(
                         Icon(
                             imageVector = ChilltraxIcons.MusicNote2,
                             contentDescription = "Music Note 2",
-                            tint = Color.White,
+                            tint = placeholderNoteTint,
                             modifier = Modifier.size(24.dp)
                         )
                     }

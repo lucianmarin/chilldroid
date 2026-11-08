@@ -144,7 +144,16 @@ object ChilltraxIcons {
  * - White radio wave paths (`ICON_SVG_CENTER_DOT_PATH_D`, `ICON_SVG_INNER_WAVE_PATH_D`, `ICON_SVG_OUTER_WAVE_PATH_D`)
  */
 @Composable
-fun ChilltraxIconSvgCanvas(modifier: Modifier = Modifier) {
+fun ChilltraxIconSvgCanvas(
+    modifier: Modifier = Modifier,
+    isDark: Boolean = true
+) {
+    val leftBackgroundColor = ChilltraxTheme.visualizerBackground(isDark)
+    val stripe1Color = if (isDark) ChilltraxTheme.AccentRed else Color(0xFFFF0505)
+    val stripe2Color = if (isDark) ChilltraxTheme.CoralRed else Color(0xFFAD0000)
+    val stripe3Color = if (isDark) ChilltraxTheme.SoftPink else Color(0xFF570000)
+    val stripe4Color = if (isDark) ChilltraxTheme.VisualizerWhite else Color(0xFF000000)
+
     Canvas(modifier = modifier) {
         val w = size.width
         val h = size.height
@@ -156,29 +165,29 @@ fun ChilltraxIconSvgCanvas(modifier: Modifier = Modifier) {
 
         // Right 1/4 4-tier vertical blocks
         drawRect(
-            color = ChilltraxTheme.AccentRed,
+            color = stripe1Color,
             topLeft = Offset(leftWidth, 0f),
             size = Size(rightWidth, stripeHeight + 0.5f)
         )
         drawRect(
-            color = ChilltraxTheme.CoralRed,
+            color = stripe2Color,
             topLeft = Offset(leftWidth, stripeHeight),
             size = Size(rightWidth, stripeHeight + 0.5f)
         )
         drawRect(
-            color = ChilltraxTheme.SoftPink,
+            color = stripe3Color,
             topLeft = Offset(leftWidth, stripeHeight * 2f),
             size = Size(rightWidth, stripeHeight + 0.5f)
         )
         drawRect(
-            color = ChilltraxTheme.VisualizerWhite,
+            color = stripe4Color,
             topLeft = Offset(leftWidth, stripeHeight * 3f),
             size = Size(rightWidth, stripeHeight)
         )
 
-        // Left 3/4 solid black panel
+        // Left 3/4 solid panel
         drawRect(
-            color = ChilltraxTheme.VisualizerBlack,
+            color = leftBackgroundColor,
             topLeft = Offset.Zero,
             size = Size(leftWidth + 0.5f, h)
         )
