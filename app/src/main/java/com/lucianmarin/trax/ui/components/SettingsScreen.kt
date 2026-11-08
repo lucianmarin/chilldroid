@@ -94,7 +94,6 @@ fun SettingsScreen(
         appState.historyStore.fileSizeBytes
     }
 
-    var customStreamInput by remember { mutableStateOf("") }
     var streamDropdownExpanded by remember { mutableStateOf(false) }
 
     Surface(
@@ -271,40 +270,6 @@ fun SettingsScreen(
                     SettingsMonospaceRow(label = "Stream URL", value = selectedStream.urlString)
                     Spacer(modifier = Modifier.height(4.dp))
                     SettingsMonospaceRow(label = "Song Info API", value = appState.activeStationEndpoints.songInfoURLString)
-
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        OutlinedTextField(
-                            value = customStreamInput,
-                            onValueChange = { customStreamInput = it },
-                            placeholder = {
-                                Text(
-                                    text = "Add custom stream or .pls URL…",
-                                    fontSize = 11.sp
-                                )
-                            },
-                            singleLine = true,
-                            textStyle = androidx.compose.ui.text.TextStyle(fontSize = 12.sp),
-                            modifier = Modifier.weight(1f)
-                        )
-                        Button(
-                            onClick = {
-                                appState.addAndSelectCustomStream(
-                                    name = "${selectedStation.displayName} Custom Stream",
-                                    urlString = customStreamInput
-                                )
-                                customStreamInput = ""
-                            },
-                            enabled = customStreamInput.trim().isNotEmpty(),
-                            colors = ButtonDefaults.buttonColors(containerColor = ChilltraxTheme.AccentRed)
-                        ) {
-                            Text("Add", fontSize = 12.sp, color = Color.White)
-                        }
-                    }
                 }
 
                 // SECTION 3: Broadcast Discovery
