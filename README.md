@@ -35,9 +35,8 @@ All application settings are consolidated into a **single scrollable page** (ins
 - **Radio Station**: Segmented selector for **Chilltrax** (`TRAX`) and **Radio Danz** (`DANZ`).
 - **Active Broadcast Stream**: Stream selector across discovered/built-in streams for the active station, displaying the active **Stream URL** and **Song Info API** endpoint, plus custom stream addition.
 - **Broadcast Discovery**: **Find Broadcasts** button (`chilltrax.com` & `radiodanz.com`) that scrapes live stream URLs, `.pls` playlists, and JSON API endpoints (`GetSongInformation`, `GetCoverImage`, `GetLastTen`).
-- **Metadata, Artwork & Notifications**:
+- **Metadata & Artwork**:
   - Toggle: *Display and fetch album covers* (with iTunes Search API fallback for Radio Danz).
-  - Toggle: *Send notification on song change* (`"Now playing on Chilltrax"` / `"Now playing on Radio Danz"`).
 - **Covers Cache & History File**:
   - *Commit Song After Playing*: Stepper / numeric input (`0`–`99` seconds, default `10` seconds).
   - Storage metrics: *Recorded Songs* count, *Album Covers Cache Size*, *Compressed History Size* (`history.tsv.gz`), and *Storage Path*.
@@ -73,7 +72,7 @@ All application settings are consolidated into a **single scrollable page** (ins
 - [x] Implement data models (`RadioStation`, `VisualizerMode`, `StationStream`, `StationAPIEndpoints`, `SongMetadata`, `SongHistoryEntry`)
 - [x] Implement `ChilltraxClient` (now playing, cover art, last 10, HTML broadcast/API discovery, `.pls` parser, iTunes cover search)
 - [x] Implement `CompressedHistoryStore` & `AlbumCoverCache`
-- [x] Implement `RadioPlayer` (Android `MediaPlayer` streaming + 56-bar spectrum/waveform synthesizer) & `SongNotificationManager`
+- [x] Implement `RadioPlayer` (Android `MediaPlayer` streaming + 56-bar spectrum/waveform synthesizer)
 - [x] Implement Android `MediaSession`, `Notification.MediaStyle`, audio focus, and background playback via `RadioPlaybackService`
 - [x] Implement `AppState` state management & persistence
 - [x] Implement Jetpack Compose UI with inverted bottom-to-top panel order and single-page Settings view

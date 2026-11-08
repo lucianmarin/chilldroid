@@ -3,7 +3,6 @@ package com.lucianmarin.trax.state
 import android.content.SharedPreferences
 import com.lucianmarin.trax.audio.PlaybackStatus
 import com.lucianmarin.trax.audio.RadioPlayer
-import com.lucianmarin.trax.audio.SongNotificationManager
 import com.lucianmarin.trax.model.RadioStation
 import com.lucianmarin.trax.model.SongHistoryEntry
 import com.lucianmarin.trax.model.SongMetadata
@@ -86,7 +85,6 @@ class AppState(
         client = client
     ),
     val radioPlayer: RadioPlayer = RadioPlayer(),
-    val notificationManager: SongNotificationManager = SongNotificationManager(),
     private val preferences: PreferencesStore = InMemoryPreferencesStore(),
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + RadioPlayer.defaultMainOrUnconfinedDispatcher()),
     startPollingAutomatically: Boolean = true,
@@ -224,15 +222,6 @@ class AppState(
             }
         }
 
-    private val _sendSongChangeNotifications = MutableStateFlow(true)
-    val sendSongChangeNotificationsFlow: StateFlow<Boolean> = _sendSongChangeNotifications.asStateFlow()
-    var sendSongChangeNotifications: Boolean
-        get() = _sendSongChangeNotifications.value
-        set(value) {
-            _sendSongChangeNotifications.value = value
-            preferences.putBoolean(KEY_SEND_NOTIFICATIONS, value)
-        }
-
     private val _isDiscoveringBroadcasts = MutableStateFlow(false)
     val isDiscoveringBroadcastsFlow: StateFlow<Boolean> = _isDiscoveringBroadcasts.asStateFlow()
     var isDiscoveringBroadcasts: Boolean
@@ -319,7 +308,6 @@ class AppState(
         }
 
         _fetchAlbumCoverFromChilltrax.value = preferences.getBoolean(KEY_FETCH_ALBUM_COVERS, true)
-        _sendSongChangeNotifications.value = preferences.getBoolean(KEY_SEND_NOTIFICATIONS, true)
 
         _historyEntries.value = historyStore.load()
         if (_fetchAlbumCoverFromChilltrax.value) {
@@ -495,10 +483,6 @@ class AppState(
 
     fun toggleAlbumCovers() {
         fetchAlbumCoverFromChilltrax = !fetchAlbumCoverFromChilltrax
-    }
-
-    fun toggleNotifications() {
-        sendSongChangeNotifications = !sendSongChangeNotifications
     }
 
     fun loadMoreHistoryIfNeeded(currentEntry: SongHistoryEntry? = null) {
@@ -753,14 +737,6 @@ class AppState(
             }
         }
         trackSongForHistory(mergedSong)
-
-        if (isNewTrack && radioPlayer.isPlaying) {
-            notificationManager.notifySongChangeIfNeeded(
-                song = mergedSong,
-                station = selectedStation,
-                isEnabled = sendSongChangeNotifications
-            )
-        }
 
         if (sourceIsICY && mergedSong.coverURL == null && fetchAlbumCoverFromChilltrax) {
             val activeStation = selectedStation
@@ -1043,7 +1019,6 @@ class AppState(
         const val KEY_VISUALIZER_MODE = "chilltrax.visualizerMode"
         const val KEY_LAST_ACTIVE_VISUALIZER_MODE = "chilltrax.lastActiveVisualizerMode"
         const val KEY_FETCH_ALBUM_COVERS = "chilltrax.fetchAlbumCovers"
-        const val KEY_SEND_NOTIFICATIONS = "chilltrax.sendNotifications"
         const val KEY_HISTORY_COMMIT_DELAY_SECONDS = "chilltrax.historyCommitDelaySeconds"
 
         fun clampHistoryCommitDelaySeconds(value: Int): Int =

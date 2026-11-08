@@ -2,7 +2,6 @@ package com.lucianmarin.trax
 
 import android.app.Application
 import com.lucianmarin.trax.audio.RadioPlayer
-import com.lucianmarin.trax.audio.SongNotificationManager
 import com.lucianmarin.trax.network.ChilltraxClient
 import com.lucianmarin.trax.state.AppState
 import com.lucianmarin.trax.state.SharedPreferencesStore
@@ -23,7 +22,6 @@ class ChilltraxApplication : Application() {
             client = ChilltraxClient(),
             historyStore = CompressedHistoryStore(file = File(storageDir, "history.tsv.gz")),
             coverCache = AlbumCoverCache(directory = File(storageDir, "Covers")),
-            notificationManager = SongNotificationManager(applicationContext),
             preferences = SharedPreferencesStore(prefs)
         )
     }
