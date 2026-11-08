@@ -94,7 +94,6 @@ fun CompactPlayerScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
-                .navigationBarsPadding()
         ) {
             // 4. TOP PANEL: Search Bar and History Results
             HistorySearchAndListSection(
@@ -331,11 +330,15 @@ private fun BottomAppControlsBar(
     onSelectVisualizerMode: (VisualizerMode) -> Unit,
     onSettingsTap: () -> Unit
 ) {
+    val controlButtonHeight = ChilltraxTheme.CONTROL_BUTTON_HEIGHT.dp
+    val controlButtonShape = RoundedCornerShape(ChilltraxTheme.CONTROL_BUTTON_CORNER_RADIUS.dp)
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(ChilltraxTheme.CONTROLS_BAR_HEIGHT.dp)
             .background(MaterialTheme.colorScheme.surface)
+            .navigationBarsPadding()
+            .height(ChilltraxTheme.CONTROLS_BAR_HEIGHT.dp)
             .padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -343,12 +346,13 @@ private fun BottomAppControlsBar(
         // Left: Radio station status in text (tapping switches TRAX <-> DANZ when playing, or opens Settings)
         Row(
             modifier = Modifier
-                .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.75f))
+                .height(controlButtonHeight)
+                .clip(controlButtonShape)
+                .background(statusDotColor.copy(alpha = 0.14f))
                 .clickable(onClick = onStatusTap)
-                .padding(horizontal = 10.dp, vertical = 6.dp),
+                .padding(horizontal = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -361,16 +365,16 @@ private fun BottomAppControlsBar(
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 0.5.sp,
-                color = MaterialTheme.colorScheme.onSurface
+                color = statusDotColor
             )
         }
 
         // Center: Segmented tabs for No Info (OFF), Waveform (Vital Signs), Spectrum (Bar Chart 4 Bars)
         Row(
             modifier = Modifier
-                .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.75f))
-                .padding(2.dp),
+                .height(controlButtonHeight)
+                .clip(controlButtonShape)
+                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.75f)),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(2.dp)
         ) {
@@ -383,12 +387,13 @@ private fun BottomAppControlsBar(
                 }
                 Row(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(6.dp))
+                        .height(controlButtonHeight)
+                        .clip(controlButtonShape)
                         .background(
                             if (isSelected) ChilltraxTheme.AccentRed else Color.Transparent
                         )
                         .clickable { onSelectVisualizerMode(tabMode) }
-                        .padding(horizontal = 9.dp, vertical = 5.dp),
+                        .padding(horizontal = 9.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
@@ -411,7 +416,8 @@ private fun BottomAppControlsBar(
         // Right: Settings Slow Motion icon button
         Box(
             modifier = Modifier
-                .clip(RoundedCornerShape(8.dp))
+                .height(controlButtonHeight)
+                .clip(controlButtonShape)
                 .background(
                     if (isSettingsActive) {
                         ChilltraxTheme.AccentRed
@@ -420,7 +426,7 @@ private fun BottomAppControlsBar(
                     }
                 )
                 .clickable(onClick = onSettingsTap)
-                .padding(horizontal = 10.dp, vertical = 6.dp),
+                .padding(horizontal = 10.dp),
             contentAlignment = Alignment.Center
         ) {
             Icon(

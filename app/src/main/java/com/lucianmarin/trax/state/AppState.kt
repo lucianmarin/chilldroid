@@ -1027,14 +1027,14 @@ class AppState(
         const val DEFAULT_HISTORY_COMMIT_DELAY_SECONDS = 10
         val HISTORY_COMMIT_DELAY_RANGE = 0..99
 
-        const val KEY_SELECTED_STATION = "chilldroid.selectedStation"
-        const val KEY_SELECTED_STREAM_ID = "chilldroid.selectedStreamID"
-        const val KEY_CUSTOM_STREAMS = "chilldroid.customStreams"
-        const val KEY_VISUALIZER_MODE = "chilldroid.visualizerMode"
-        const val KEY_LAST_ACTIVE_VISUALIZER_MODE = "chilldroid.lastActiveVisualizerMode"
-        const val KEY_FETCH_ALBUM_COVERS = "chilldroid.fetchAlbumCovers"
-        const val KEY_SEND_NOTIFICATIONS = "chilldroid.sendNotifications"
-        const val KEY_HISTORY_COMMIT_DELAY_SECONDS = "chilldroid.historyCommitDelaySeconds"
+        const val KEY_SELECTED_STATION = "chilltrax.selectedStation"
+        const val KEY_SELECTED_STREAM_ID = "chilltrax.selectedStreamID"
+        const val KEY_CUSTOM_STREAMS = "chilltrax.customStreams"
+        const val KEY_VISUALIZER_MODE = "chilltrax.visualizerMode"
+        const val KEY_LAST_ACTIVE_VISUALIZER_MODE = "chilltrax.lastActiveVisualizerMode"
+        const val KEY_FETCH_ALBUM_COVERS = "chilltrax.fetchAlbumCovers"
+        const val KEY_SEND_NOTIFICATIONS = "chilltrax.sendNotifications"
+        const val KEY_HISTORY_COMMIT_DELAY_SECONDS = "chilltrax.historyCommitDelaySeconds"
 
         fun clampHistoryCommitDelaySeconds(value: Int): Int =
             value.coerceIn(HISTORY_COMMIT_DELAY_RANGE.first, HISTORY_COMMIT_DELAY_RANGE.last)

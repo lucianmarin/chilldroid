@@ -76,7 +76,7 @@ class SongNotificationManager(
     }
 
     companion object {
-        const val CHANNEL_ID = "chilldroid_now_playing"
+        const val CHANNEL_ID = "chilltrax_now_playing"
         const val NOTIFICATION_ID = 1001
 
         fun makeNotificationContent(

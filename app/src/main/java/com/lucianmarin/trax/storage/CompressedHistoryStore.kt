@@ -149,7 +149,7 @@ class CompressedHistoryStore(
         .replace("\\\\", "\\")
 
     companion object {
-        private const val HEADER_LINE = "# chilldroid-song-history-v1\tid\tplayed_at_iso8601\tartist\ttitle\talbum_or_mix\tyear\tstation_name\tstation_url\tcover_url"
+        private const val HEADER_LINE = "# chilltrax-song-history-v1\tid\tplayed_at_iso8601\tartist\ttitle\talbum_or_mix\tyear\tstation_name\tstation_url\tcover_url"
         const val MAX_ENTRIES = 5_000
 
         fun compressGzip(data: ByteArray): ByteArray {

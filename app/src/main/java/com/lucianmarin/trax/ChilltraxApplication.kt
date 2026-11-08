@@ -10,14 +10,14 @@ import com.lucianmarin.trax.storage.AlbumCoverCache
 import com.lucianmarin.trax.storage.CompressedHistoryStore
 import java.io.File
 
-class ChilldroidApplication : Application() {
+class ChilltraxApplication : Application() {
     lateinit var appState: AppState
         private set
 
     override fun onCreate() {
         super.onCreate()
-        val storageDir = File(filesDir, "Chilldroid")
-        val prefs = getSharedPreferences("chilldroid_prefs", MODE_PRIVATE)
+        val storageDir = File(filesDir, "Chilltrax")
+        val prefs = getSharedPreferences("chilltrax_prefs", MODE_PRIVATE)
         appState = AppState(
             radioPlayer = RadioPlayer(context = applicationContext),
             client = ChilltraxClient(),

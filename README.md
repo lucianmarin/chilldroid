@@ -1,6 +1,6 @@
-# Chilldroid — Two-Station Android Radio Player (`Chilltrax` & `Radio Danz`)
+# Chilltrax — Two-Station Android Radio Player (`Chilltrax` & `Radio Danz`)
 
-Native Android application (`applicationId`: `com.lucianmarin.trax`) built with **Kotlin** and **Jetpack Compose** (Material 3) for streaming **Chilltrax** ("The World's Chillout Channel") and **Radio Danz** ("The World's Dance Music Channel"). Modeled after the `../chilltrax` macOS app with an **inverted bottom-to-top panel layout**, **single-page settings**, and **Google Fonts Material Symbols** iconography.
+Native Android application (`app_name`: `Chilltrax`, `applicationId`: `com.lucianmarin.trax`) built with **Kotlin** and **Jetpack Compose** (Material 3) for streaming **Chilltrax** ("The World's Chillout Channel") and **Radio Danz** ("The World's Dance Music Channel"). Modeled after the `../chilltrax` macOS app with an **inverted bottom-to-top panel layout**, **single-page settings**, and **Google Fonts Material Symbols** iconography.
 
 ---
 

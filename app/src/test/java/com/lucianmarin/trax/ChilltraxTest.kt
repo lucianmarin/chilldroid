@@ -31,7 +31,7 @@ import java.io.File
 import java.nio.file.Files
 import java.util.UUID
 
-class ChilldroidTest {
+class ChilltraxTest {
     private val json = Json { ignoreUnknownKeys = true }
 
     @Test
@@ -342,6 +342,12 @@ class ChilldroidTest {
         assertEquals(ChilltraxTheme.VisualizerWhite, VisualizerMetrics.spectrumBarColor(0.50f, isDark = true))
         assertEquals(ChilltraxTheme.VisualizerBlack, VisualizerMetrics.spectrumBarColor(0.50f, isDark = false))
         assertEquals(ChilltraxTheme.VisualizerGray, VisualizerMetrics.spectrumBarColor(0.15f, isDark = true))
+
+        assertEquals(ChilltraxTheme.LiveGreen, ChilltraxTheme.statusDotColor(PlaybackStatus.PLAYING))
+        assertEquals(ChilltraxTheme.AccentRed, ChilltraxTheme.statusDotColor(PlaybackStatus.CONNECTING))
+        assertEquals(ChilltraxTheme.VisualizerGray, ChilltraxTheme.statusDotColor(PlaybackStatus.IDLE))
+        assertEquals(ChilltraxTheme.VisualizerGray, ChilltraxTheme.statusDotColor(PlaybackStatus.PAUSED))
+        assertEquals(ChilltraxTheme.AccentRed, ChilltraxTheme.statusDotColor(PlaybackStatus.ERROR))
     }
 
     @Test

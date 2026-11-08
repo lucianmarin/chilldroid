@@ -20,6 +20,7 @@ enum class PanelSection(val orderFromBottom: Int, val label: String) {
 object ChilltraxTheme {
     // Exact colors from `icon.svg`
     val AccentRed = Color(0xFFFA0000)
+    val LiveGreen = Color(0xFF34C759)
     val CoralRed = Color(0xFFFF5252)
     val SoftPink = Color(0xFFFFA8A8)
     val VisualizerGray = Color(0xFF808080)
@@ -41,6 +42,8 @@ object ChilltraxTheme {
     const val HEADER_SECTION_HEIGHT = 80f
     const val VISUALIZER_SECTION_HEIGHT = 68f
     const val CONTROLS_BAR_HEIGHT = 48f
+    const val CONTROL_BUTTON_HEIGHT = 30f
+    const val CONTROL_BUTTON_CORNER_RADIUS = 8f
     const val COMPACT_HEIGHT = HEADER_SECTION_HEIGHT + VISUALIZER_SECTION_HEIGHT
     const val COMPACT_NO_VISUALIZER_HEIGHT = HEADER_SECTION_HEIGHT
     const val SEARCH_BAR_SECTION_HEIGHT = 50f
@@ -69,10 +72,10 @@ object ChilltraxTheme {
         if (isDark) VisualizerWhite else VisualizerBlack
 
     fun statusDotColor(status: PlaybackStatus): Color = when (status) {
-        PlaybackStatus.PLAYING -> AccentRed
-        PlaybackStatus.CONNECTING -> CoralRed
-        PlaybackStatus.PAUSED -> SoftPink
-        PlaybackStatus.IDLE -> Color.Gray.copy(alpha = 0.55f)
+        PlaybackStatus.PLAYING -> LiveGreen
+        PlaybackStatus.CONNECTING -> AccentRed
+        PlaybackStatus.PAUSED -> VisualizerGray
+        PlaybackStatus.IDLE -> VisualizerGray
         PlaybackStatus.ERROR -> AccentRed
     }
 }
@@ -95,16 +98,16 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = Color.White,
     secondary = ChilltraxTheme.CoralRed,
     tertiary = ChilltraxTheme.SoftPink,
-    background = Color(0xFFFAFAFA),
-    surface = Color(0xFFFFFFFF),
-    surfaceVariant = Color(0xFFF0F0F0),
-    onBackground = Color(0xFF111111),
-    onSurface = Color(0xFF111111),
-    onSurfaceVariant = Color(0xFF666666)
+    background = Color(0xFFFFFFFF),
+    surface = Color(0xFFF0F0F0),
+    surfaceVariant = Color(0xFFE0E0E0),
+    onBackground = Color(0xFF000000),
+    onSurface = Color(0xFF202020),
+    onSurfaceVariant = Color(0xFF808080)
 )
 
 @Composable
-fun ChilldroidAppTheme(
+fun ChilltraxAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {

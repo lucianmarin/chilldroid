@@ -21,7 +21,7 @@ import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.IBinder
 import androidx.core.content.ContextCompat
-import com.lucianmarin.trax.ChilldroidApplication
+import com.lucianmarin.trax.ChilltraxApplication
 import com.lucianmarin.trax.MainActivity
 import com.lucianmarin.trax.R
 import com.lucianmarin.trax.model.RadioStation
@@ -54,7 +54,7 @@ data class MediaPlaybackSnapshot(
 )
 
 /**
- * Foreground media playback service that keeps Chilldroid streaming in the background
+ * Foreground media playback service that keeps Chilltrax streaming in the background
  * and integrates with Android system media controls (`MediaSession` + `Notification.MediaStyle`).
  */
 class RadioPlaybackService : Service() {
@@ -119,7 +119,7 @@ class RadioPlaybackService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun appStateOrNull(): AppState? {
-        return (application as? ChilldroidApplication)?.appState
+        return (application as? ChilltraxApplication)?.appState
     }
 
     private fun initWifiLock() {

@@ -4,10 +4,13 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color as AndroidColor
 import android.media.AudioManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -15,19 +18,31 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.lucianmarin.trax.ui.components.CompactPlayerScreen
 import com.lucianmarin.trax.ui.components.SettingsScreen
-import com.lucianmarin.trax.ui.theme.ChilldroidAppTheme
+import com.lucianmarin.trax.ui.theme.ChilltraxAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         volumeControlStream = AudioManager.STREAM_MUSIC
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(
+                AndroidColor.TRANSPARENT,
+                AndroidColor.TRANSPARENT
+            ),
+            navigationBarStyle = SystemBarStyle.auto(
+                AndroidColor.TRANSPARENT,
+                AndroidColor.TRANSPARENT
+            )
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+        }
 
-        val app = application as ChilldroidApplication
+        val app = application as ChilltraxApplication
         val appState = app.appState
 
         setContent {
-            ChilldroidAppTheme {
+            ChilltraxAppTheme {
                 val isSettingsVisible by appState.isSettingsVisibleFlow.collectAsState()
 
                 BackHandler(enabled = isSettingsVisible) {
@@ -52,7 +67,7 @@ class MainActivity : ComponentActivity() {
 
     private fun copyToSystemClipboard(text: String) {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager ?: return
-        val clip = ClipData.newPlainText("Chilldroid Song", text)
+        val clip = ClipData.newPlainText("Chilltrax Song", text)
         clipboard.setPrimaryClip(clip)
     }
 

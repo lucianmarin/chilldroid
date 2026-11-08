@@ -127,7 +127,7 @@ fun SettingsScreen(
                         modifier = Modifier.size(20.dp)
                     )
                     Text(
-                        text = "Chilldroid Settings",
+                        text = "Chilltrax Settings",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground

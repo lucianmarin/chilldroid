@@ -237,7 +237,7 @@ class ChilltraxClient(
     )
 
     companion object {
-        const val USER_AGENT = "Chilldroid/1.0 (Android; Jetpack Compose)"
+        const val USER_AGENT = "Chilltrax/1.0 (Android; Jetpack Compose)"
 
         fun defaultOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
             .connectTimeout(12, TimeUnit.SECONDS)
