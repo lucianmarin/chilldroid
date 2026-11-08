@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated from icon.svg: left 3/4 black (#000000), right 1/4 4-tier vertical blocks (#FA0000, #FF5252, #FFA8A8, #FFFFFF) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="240"
+    android:viewportHeight="240">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M0,0H240V240H0Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M180,180H240V240H180Z" />
+    <path
+        android:fillColor="#FFA8A8"
+        android:pathData="M180,120H240V180H180Z" />
+    <path
+        android:fillColor="#FF5252"
+        android:pathData="M180,60H240V120H180Z" />
+    <path
+        android:fillColor="#FA0000"
+        android:pathData="M180,0H240V60H180Z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M0,0H180V240H0Z" />
+</vector>
