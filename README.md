@@ -9,7 +9,7 @@ Native Android application (`app_name`: `Chilltrax`, `applicationId`: `com.lucia
 ### 1. Inverted Panel Layout (Bottom to Top)
 The main player screen stacks its four panels from bottom to top:
 1. **Bottom — App Controls Bar**:
-   - **Radio Station Status Text Badge** (left): Displays `READY`, `TRAX` (when Chilltrax is playing), `DANZ` (when Radio Danz is playing), `PAUSED`, `CONNECTING…`, or `STREAM ERROR`. Tapping while `TRAX` or `DANZ` is shown immediately switches between Chilltrax and Radio Danz; tapping any other status opens Settings.
+   - **Radio Station Status Text Badge** (left): Displays `READY`, `TRAX` (when Chilltrax is playing), `DANZ` (when Radio Danz is playing), `PAUSED`, `LOADING`, or `ERROR`. Tapping while `TRAX` or `DANZ` is shown immediately switches between Chilltrax and Radio Danz; tapping any other status opens Settings.
    - **Segmented Visualizer Mode Tabs** (center): Three segments for:
      - **No Info / Off**: Hides the visualizer panel (`notes` / `format_align_left` icon).
      - **Waveform Visualizer**: Uses the Google Fonts Material Symbols **Vital Signs** (`vital_signs`) icon.

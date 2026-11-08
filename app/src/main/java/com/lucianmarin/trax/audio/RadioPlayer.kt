@@ -26,10 +26,10 @@ import kotlin.math.sqrt
 
 enum class PlaybackStatus(val rawValue: String) {
     IDLE("Ready"),
-    CONNECTING("Connecting…"),
+    CONNECTING("Loading"),
     PLAYING("Playing"),
     PAUSED("Paused"),
-    ERROR("Stream Error")
+    ERROR("Error")
 }
 
 class RadioPlayer(

@@ -71,6 +71,8 @@ object ChilltraxTheme {
     fun visualizerContrastColor(isDark: Boolean): Color =
         if (isDark) VisualizerWhite else VisualizerBlack
 
+    val ControlButtonBackground = VisualizerGray.copy(alpha = 0.14f)
+
     fun statusDotColor(status: PlaybackStatus): Color = when (status) {
         PlaybackStatus.PLAYING -> LiveGreen
         PlaybackStatus.CONNECTING -> AccentRed

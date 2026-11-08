@@ -368,6 +368,12 @@ class ChilltraxTest {
             player.setSimulatedPlaybackStateForTesting(isPlaying = false, status = PlaybackStatus.IDLE)
             assertEquals("READY", state.toolbarStatusLabel)
 
+            player.setSimulatedPlaybackStateForTesting(isPlaying = false, status = PlaybackStatus.CONNECTING)
+            assertEquals("LOADING", state.toolbarStatusLabel)
+
+            player.setSimulatedPlaybackStateForTesting(isPlaying = false, status = PlaybackStatus.ERROR)
+            assertEquals("ERROR", state.toolbarStatusLabel)
+
             player.setSimulatedPlaybackStateForTesting(isPlaying = false, status = PlaybackStatus.PAUSED)
             assertEquals("PAUSED", state.toolbarStatusLabel)
 
@@ -505,6 +511,7 @@ class ChilltraxTest {
             state.handleIncomingSongMetadata(song, sourceIsICY = false)
 
             assertEquals(1, state.historyEntries.size)
+            assertEquals(1, state.historyCommitCount)
             assertEquals("Instant Track", state.historyEntries.first().title)
             assertEquals("DANZ", state.historyEntries.first().stationBadgeLabel)
         } finally {

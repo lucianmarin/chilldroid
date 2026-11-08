@@ -73,14 +73,7 @@ fun CompactPlayerScreen(
     val levels by appState.radioPlayer.visualizerLevelsFlow.collectAsState()
     val trailLevels by appState.radioPlayer.visualizerTrailLevelsFlow.collectAsState()
     val phase by appState.radioPlayer.waveformPhaseFlow.collectAsState()
-    val historyEntries by appState.historyEntriesFlow.collectAsState()
-    val searchQuery by appState.historySearchQueryFlow.collectAsState()
-    val isSettingsVisible by appState.isSettingsVisibleFlow.collectAsState()
     val cacheRevision by appState.coverCache.revision.collectAsState()
-
-    val filteredCount = remember(searchQuery, historyEntries) {
-        appState.filteredHistoryEntries.size
-    }
 
     val statusText = remember(playbackStatus, selectedStation) {
         appState.toolbarStatusLabel
@@ -148,7 +141,6 @@ fun CompactPlayerScreen(
                 statusLabel = statusText,
                 statusDotColor = ChilltraxTheme.statusDotColor(playbackStatus),
                 visualizerMode = visualizerMode,
-                isSettingsActive = isSettingsVisible,
                 onStatusTap = {
                     appState.handleToolbarStatusTap(autoPlayIfCurrentlyPlaying = true) {
                         appState.openSettings()
@@ -156,9 +148,6 @@ fun CompactPlayerScreen(
                 },
                 onSelectVisualizerMode = { mode ->
                     appState.selectVisualizerMode(mode)
-                },
-                onSettingsTap = {
-                    appState.toggleSettings()
                 }
             )
         }
@@ -258,10 +247,12 @@ private fun CurrentSongInfoPanel(
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        // Song Title, Artist, Album/Mix
+        // Song Title, Artist, Album/Mix (equal height to the 60dp album cover)
         Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+            modifier = Modifier
+                .weight(1f)
+                .height(60.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             val titleText = if (isPlaying) currentSong.title else SongMetadata.placeholder.title
             val artistText = if (isPlaying) currentSong.artist else SongMetadata.placeholder.artist
@@ -271,31 +262,55 @@ private fun CurrentSongInfoPanel(
                 SongMetadata.placeholder.albumOrMix
             }
 
-            Text(
-                text = titleText,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.clickable(enabled = canCopySong, onClick = onCopyCurrentSong)
-            )
-            Text(
-                text = artistText,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Medium,
-                color = if (isPlaying) ChilltraxTheme.AccentRed else MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.clickable(enabled = canCopySong, onClick = onCopyCurrentSong)
-            )
-            Text(
-                text = albumText,
-                fontSize = 11.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .clickable(enabled = canCopySong, onClick = onCopyCurrentSong),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Text(
+                    text = titleText,
+                    fontSize = 15.sp,
+                    lineHeight = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .clickable(enabled = canCopySong, onClick = onCopyCurrentSong),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Text(
+                    text = artistText,
+                    fontSize = 13.sp,
+                    lineHeight = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = if (isPlaying) ChilltraxTheme.AccentRed else MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Text(
+                    text = albumText,
+                    fontSize = 11.sp,
+                    lineHeight = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
 
         Spacer(modifier = Modifier.width(12.dp))
@@ -325,10 +340,8 @@ private fun BottomAppControlsBar(
     statusLabel: String,
     statusDotColor: Color,
     visualizerMode: VisualizerMode,
-    isSettingsActive: Boolean,
     onStatusTap: () -> Unit,
-    onSelectVisualizerMode: (VisualizerMode) -> Unit,
-    onSettingsTap: () -> Unit
+    onSelectVisualizerMode: (VisualizerMode) -> Unit
 ) {
     val controlButtonHeight = ChilltraxTheme.CONTROL_BUTTON_HEIGHT.dp
     val controlButtonShape = RoundedCornerShape(ChilltraxTheme.CONTROL_BUTTON_CORNER_RADIUS.dp)
@@ -369,12 +382,12 @@ private fun BottomAppControlsBar(
             )
         }
 
-        // Center: Segmented tabs for No Info (OFF), Waveform (Vital Signs), Spectrum (Bar Chart 4 Bars)
+        // Right: Segmented tabs for No Info (OFF), Waveform (Vital Signs), Spectrum (Bar Chart 4 Bars)
         Row(
             modifier = Modifier
                 .height(controlButtonHeight)
                 .clip(controlButtonShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.75f)),
+                .background(ChilltraxTheme.ControlButtonBackground),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(2.dp)
         ) {
@@ -411,30 +424,6 @@ private fun BottomAppControlsBar(
                     )
                 }
             }
-        }
-
-        // Right: Settings Slow Motion icon button
-        Box(
-            modifier = Modifier
-                .height(controlButtonHeight)
-                .clip(controlButtonShape)
-                .background(
-                    if (isSettingsActive) {
-                        ChilltraxTheme.AccentRed
-                    } else {
-                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.75f)
-                    }
-                )
-                .clickable(onClick = onSettingsTap)
-                .padding(horizontal = 10.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = ChilltraxIcons.SettingsSlowMotion,
-                contentDescription = "Settings",
-                tint = if (isSettingsActive) Color.White else MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.size(16.dp)
-            )
         }
     }
 }

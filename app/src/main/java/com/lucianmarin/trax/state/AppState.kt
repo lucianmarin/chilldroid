@@ -110,6 +110,14 @@ class AppState(
             _historyEntries.value = value
         }
 
+    private val _historyCommitCount = MutableStateFlow(0)
+    val historyCommitCountFlow: StateFlow<Int> = _historyCommitCount.asStateFlow()
+    var historyCommitCount: Int
+        get() = _historyCommitCount.value
+        private set(value) {
+            _historyCommitCount.value = value
+        }
+
     private val _historyDisplayLimit = MutableStateFlow(HISTORY_PAGE_SIZE)
     val historyDisplayLimitFlow: StateFlow<Int> = _historyDisplayLimit.asStateFlow()
     var historyDisplayLimit: Int
@@ -391,8 +399,8 @@ class AppState(
             PlaybackStatus.PLAYING -> selectedStation.badgeLabel
             PlaybackStatus.IDLE -> "READY"
             PlaybackStatus.PAUSED -> "PAUSED"
-            PlaybackStatus.CONNECTING -> "CONNECTING…"
-            PlaybackStatus.ERROR -> "STREAM ERROR"
+            PlaybackStatus.CONNECTING -> "LOADING"
+            PlaybackStatus.ERROR -> "ERROR"
         }
 
     val isToolbarStatusShowingStationBadge: Boolean
@@ -419,7 +427,7 @@ class AppState(
     /**
      * Handles tapping the status badge in the bottom app controls bar:
      * - When playing (`TRAX` or `DANZ`), switches between Chilltrax and Radio Danz.
-     * - For any other status (`READY`, `PAUSED`, `CONNECTING…`, `STREAM ERROR`), opens Settings.
+     * - For any other status (`READY`, `PAUSED`, `LOADING`, `ERROR`), opens Settings.
      */
     fun handleToolbarStatusTap(
         autoPlayIfCurrentlyPlaying: Boolean = true,
@@ -890,6 +898,7 @@ class AppState(
             station = stream,
             existingEntries = historyEntries
         )
+        historyCommitCount += 1
         song.coverURL?.let { url ->
             scope.launch {
                 coverCache.cacheCover(urlString = url)

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.HorizontalDivider
@@ -60,9 +61,12 @@ fun HistorySearchAndListSection(
 ) {
     val searchQuery by appState.historySearchQueryFlow.collectAsState()
     val historyEntries by appState.historyEntriesFlow.collectAsState()
+    val historyCommitCount by appState.historyCommitCountFlow.collectAsState()
     val displayLimit by appState.historyDisplayLimitFlow.collectAsState()
     val copiedID by appState.copiedHistoryEntryIDFlow.collectAsState()
+    val isSettingsVisible by appState.isSettingsVisibleFlow.collectAsState()
     val cacheRevision by appState.coverCache.revision.collectAsState()
+    val listState = rememberLazyListState()
 
     val filteredEntries = remember(searchQuery, historyEntries) {
         appState.filteredHistoryEntries
@@ -71,71 +75,112 @@ fun HistorySearchAndListSection(
         appState.displayedHistoryEntries
     }
 
+    LaunchedEffect(historyCommitCount) {
+        if (historyCommitCount > 0 && displayedEntries.isNotEmpty()) {
+            listState.scrollToItem(0)
+        }
+    }
+
+    val controlButtonHeight = ChilltraxTheme.CONTROL_BUTTON_HEIGHT.dp
+    val controlButtonShape = RoundedCornerShape(ChilltraxTheme.CONTROL_BUTTON_CORNER_RADIUS.dp)
+
     Column(modifier = modifier.fillMaxWidth()) {
-        // Search Bar at the very top of the inverted player layout
+        // Search Bar + Settings button at the very top of the inverted player layout
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(ChilltraxTheme.SEARCH_BAR_SECTION_HEIGHT.dp)
-                .padding(horizontal = 14.dp, vertical = 8.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f))
-                .padding(horizontal = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(horizontal = 14.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Icon(
-                imageVector = ChilltraxIcons.Search,
-                contentDescription = "Search song history",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(16.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
-                if (searchQuery.isEmpty()) {
-                    Text(
-                        text = "Search song history (artist, title, album, station)…",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
-                        fontSize = 12.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(controlButtonHeight)
+                    .clip(controlButtonShape)
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f))
+                    .padding(horizontal = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = ChilltraxIcons.Search,
+                    contentDescription = "Search song history",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
+                    if (searchQuery.isEmpty()) {
+                        Text(
+                            text = "Search title, artist, album, station…",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
+                            fontSize = 12.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                    BasicTextField(
+                        value = searchQuery,
+                        onValueChange = { appState.historySearchQuery = it },
+                        singleLine = true,
+                        textStyle = TextStyle(
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 12.sp
+                        ),
+                        cursorBrush = SolidColor(ChilltraxTheme.AccentRed),
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
-                BasicTextField(
-                    value = searchQuery,
-                    onValueChange = { appState.historySearchQuery = it },
-                    singleLine = true,
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 12.sp
-                    ),
-                    cursorBrush = SolidColor(ChilltraxTheme.AccentRed),
-                    modifier = Modifier.fillMaxWidth()
+
+                if (searchQuery.isNotEmpty()) {
+                    Spacer(modifier = Modifier.width(6.dp))
+                    IconButton(
+                        onClick = { appState.historySearchQuery = "" },
+                        modifier = Modifier.size(20.dp)
+                    ) {
+                        Icon(
+                            imageVector = ChilltraxIcons.Cancel,
+                            contentDescription = "Clear search",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(15.dp)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "${filteredEntries.size}",
+                    fontSize = 11.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
-            if (searchQuery.isNotEmpty()) {
-                Spacer(modifier = Modifier.width(6.dp))
-                IconButton(
-                    onClick = { appState.historySearchQuery = "" },
-                    modifier = Modifier.size(20.dp)
-                ) {
-                    Icon(
-                        imageVector = ChilltraxIcons.Cancel,
-                        contentDescription = "Clear search",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(15.dp)
+            // Right of Search Bar: Settings Slow Motion icon button
+            Box(
+                modifier = Modifier
+                    .height(controlButtonHeight)
+                    .clip(controlButtonShape)
+                    .background(
+                        if (isSettingsVisible) {
+                            ChilltraxTheme.AccentRed
+                        } else {
+                            ChilltraxTheme.ControlButtonBackground
+                        }
                     )
-                }
+                    .clickable { appState.toggleSettings() }
+                    .padding(horizontal = 10.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = ChilltraxIcons.SettingsSlowMotion,
+                    contentDescription = "Settings",
+                    tint = if (isSettingsVisible) Color.White else MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.size(16.dp)
+                )
             }
-
-            Spacer(modifier = Modifier.width(6.dp))
-            Text(
-                text = "${filteredEntries.size}",
-                fontSize = 11.sp,
-                fontFamily = FontFamily.Monospace,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
         }
 
         HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
@@ -173,6 +218,7 @@ fun HistorySearchAndListSection(
                 }
             } else {
                 LazyColumn(
+                    state = listState,
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(vertical = 2.dp)
                 ) {
@@ -196,7 +242,7 @@ fun HistorySearchAndListSection(
                         )
                         if (index < displayedEntries.lastIndex) {
                             HorizontalDivider(
-                                modifier = Modifier.padding(horizontal = 12.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.06f)
                             )
                         }
