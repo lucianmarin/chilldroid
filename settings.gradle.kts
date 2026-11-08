@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "chilldroid"
+rootProject.name = "Chilltrax"
 include(":app")

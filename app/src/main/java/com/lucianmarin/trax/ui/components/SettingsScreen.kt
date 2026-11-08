@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -29,7 +30,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -133,9 +133,14 @@ fun SettingsScreen(
                     )
                 }
 
-                OutlinedButton(
-                    onClick = onClose,
-                    shape = RoundedCornerShape(8.dp)
+                Box(
+                    modifier = Modifier
+                        .height(ChilltraxTheme.CONTROL_BUTTON_HEIGHT.dp)
+                        .clip(RoundedCornerShape(ChilltraxTheme.CONTROL_BUTTON_CORNER_RADIUS.dp))
+                        .background(ChilltraxTheme.AccentRed.copy(alpha = 0.14f))
+                        .clickable(onClick = onClose)
+                        .padding(horizontal = 12.dp),
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "Done",
@@ -153,8 +158,6 @@ fun SettingsScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 // SECTION 1: Radio Station
                 SettingsSectionCard(title = "Radio Station") {
@@ -168,7 +171,7 @@ fun SettingsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(8.dp))
+                            .clip(CircleShape)
                             .background(MaterialTheme.colorScheme.surfaceVariant)
                             .padding(3.dp),
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -178,7 +181,7 @@ fun SettingsScreen(
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
-                                    .clip(RoundedCornerShape(6.dp))
+                                    .clip(CircleShape)
                                     .background(if (isSelected) ChilltraxTheme.AccentRed else Color.Transparent)
                                     .clickable {
                                         appState.selectStation(station, autoPlayIfCurrentlyPlaying = true)
@@ -202,6 +205,8 @@ fun SettingsScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+
+                HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
 
                 // SECTION 2: Active Broadcast Stream
                 SettingsSectionCard(title = "Active Broadcast Stream") {
@@ -272,6 +277,8 @@ fun SettingsScreen(
                     SettingsMonospaceRow(label = "Song Info API", value = appState.activeStationEndpoints.songInfoURLString)
                 }
 
+                HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
+
                 // SECTION 3: Broadcast Discovery
                 SettingsSectionCard(title = "Broadcast Discovery") {
                     Row(
@@ -320,6 +327,8 @@ fun SettingsScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+
+                HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
 
                 // SECTION 4: Metadata, Artwork & Notifications
                 SettingsSectionCard(title = "Metadata, Artwork & Notifications") {
@@ -377,6 +386,8 @@ fun SettingsScreen(
                         )
                     }
                 }
+
+                HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
 
                 // SECTION 5: Covers Cache & History File
                 SettingsSectionCard(title = "Covers Cache & History File") {
@@ -467,17 +478,18 @@ fun SettingsScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        OutlinedButton(
+                        Button(
                             onClick = {
                                 appState.clearHistory()
                                 storageRefreshTrigger += 1
                             },
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = ChilltraxTheme.AccentRed)
+                            colors = ButtonDefaults.buttonColors(containerColor = ChilltraxTheme.AccentRed)
                         ) {
                             Text(
                                 text = "Clear Cache & History",
                                 fontSize = 12.sp,
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.White
                             )
                         }
                         Text(
@@ -501,14 +513,7 @@ private fun SettingsSectionCard(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
-                shape = RoundedCornerShape(12.dp)
-            )
-            .padding(14.dp)
+            .padding(16.dp)
     ) {
         Text(
             text = title,
