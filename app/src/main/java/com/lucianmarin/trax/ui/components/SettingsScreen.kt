@@ -112,7 +112,7 @@ fun SettingsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp)
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = ChilltraxTheme.HORIZONTAL_PADDING.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -137,7 +137,7 @@ fun SettingsScreen(
                 Box(
                     modifier = Modifier
                         .height(ChilltraxTheme.CONTROL_BUTTON_HEIGHT.dp)
-                        .clip(RoundedCornerShape(ChilltraxTheme.CONTROL_BUTTON_CORNER_RADIUS.dp))
+                        .clip(RoundedCornerShape(ChilltraxTheme.CORNER_RADIUS.dp))
                         .background(ChilltraxTheme.AccentRed.copy(alpha = 0.14f))
                         .clickable(onClick = onClose)
                         .padding(horizontal = 12.dp),
@@ -489,7 +489,7 @@ private fun SettingsSectionCard(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(horizontal = ChilltraxTheme.HORIZONTAL_PADDING.dp, vertical = 16.dp)
     ) {
         Text(
             text = title,

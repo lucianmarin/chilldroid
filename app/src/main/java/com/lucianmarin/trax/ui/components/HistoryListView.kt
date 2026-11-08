@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -83,7 +84,7 @@ fun HistorySearchAndListSection(
     }
 
     val controlButtonHeight = ChilltraxTheme.CONTROL_BUTTON_HEIGHT.dp
-    val controlButtonShape = RoundedCornerShape(ChilltraxTheme.CONTROL_BUTTON_CORNER_RADIUS.dp)
+    val controlButtonShape = RoundedCornerShape(ChilltraxTheme.CORNER_RADIUS.dp)
 
     Column(modifier = modifier.fillMaxWidth()) {
         // Search Bar + Settings button at the very top of the inverted player layout
@@ -91,7 +92,7 @@ fun HistorySearchAndListSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(ChilltraxTheme.SEARCH_BAR_SECTION_HEIGHT.dp)
-                .padding(horizontal = 14.dp, vertical = 8.dp),
+                .padding(horizontal = ChilltraxTheme.HORIZONTAL_PADDING.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -101,7 +102,7 @@ fun HistorySearchAndListSection(
                     .height(controlButtonHeight)
                     .clip(controlButtonShape)
                     .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f))
-                    .padding(horizontal = 10.dp),
+                    .padding(horizontal = 10.dp, vertical = 1.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
@@ -116,7 +117,7 @@ fun HistorySearchAndListSection(
                         Text(
                             text = "Search title, artist, album, station…",
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
-                            fontSize = 12.sp,
+                            fontSize = 13.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -127,7 +128,7 @@ fun HistorySearchAndListSection(
                         singleLine = true,
                         textStyle = TextStyle(
                             color = MaterialTheme.colorScheme.onSurface,
-                            fontSize = 12.sp
+                            fontSize = 13.sp
                         ),
                         cursorBrush = SolidColor(ChilltraxTheme.AccentRed),
                         modifier = Modifier.fillMaxWidth()
@@ -172,7 +173,7 @@ fun HistorySearchAndListSection(
                         }
                     )
                     .clickable { appState.toggleSettings() }
-                    .padding(horizontal = 10.dp),
+                    .padding(horizontal = 10.dp, vertical = 1.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -275,8 +276,9 @@ private fun HistoryRowItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .height(ChilltraxTheme.HISTORY_ROW_HEIGHT.dp)
             .clickable(onClick = onRowClick)
-            .padding(horizontal = 14.dp, vertical = 6.dp),
+            .padding(horizontal = ChilltraxTheme.HORIZONTAL_PADDING.dp, vertical = 5.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (showCover) {
@@ -290,14 +292,22 @@ private fun HistoryRowItem(
             Spacer(modifier = Modifier.width(10.dp))
         }
 
-        Column(modifier = Modifier.weight(1f)) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .height(40.dp)
+                .padding(vertical = 3.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
             Text(
                 text = entry.title.ifEmpty { "Unknown Title" },
-                fontSize = 12.sp,
+                fontSize = 13.sp,
+                lineHeight = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
             )
             val subtitle = buildString {
                 append(entry.artist.ifEmpty { "Unknown Artist" })
@@ -308,23 +318,32 @@ private fun HistoryRowItem(
             }
             Text(
                 text = subtitle,
-                fontSize = 11.sp,
+                fontSize = 12.sp,
+                lineHeight = 14.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
             )
         }
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        Column(horizontalAlignment = Alignment.End) {
+        Column(
+            modifier = Modifier
+                .height(40.dp)
+                .padding(vertical = 1.dp),
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
             Text(
                 text = formatRelativeTimestamp(entry.playedAtEpochSeconds),
-                fontSize = 10.sp,
+                fontSize = 12.sp,
+                lineHeight = 15.sp,
                 fontFamily = FontFamily.Monospace,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
             )
-            Spacer(modifier = Modifier.height(2.dp))
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(4.dp))
@@ -335,13 +354,16 @@ private fun HistoryRowItem(
                             ChilltraxTheme.SoftPink.copy(alpha = 0.20f)
                         }
                     )
-                    .padding(horizontal = 5.dp, vertical = 1.dp)
+                    .padding(horizontal = 5.dp, vertical = 2.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = badgeLabel,
-                    fontSize = 9.sp,
+                    fontSize = 11.sp,
+                    lineHeight = 10.sp,
                     fontWeight = FontWeight.Bold,
-                    color = if (isCopied) Color.White else ChilltraxTheme.CoralRed
+                    color = if (isCopied) Color.White else ChilltraxTheme.CoralRed,
+                    style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
                 )
             }
         }
@@ -368,8 +390,8 @@ private fun HistoryCoverThumbnail(
 
     Box(
         modifier = Modifier
-            .size(36.dp)
-            .clip(RoundedCornerShape(6.dp))
+            .size(40.dp)
+            .clip(RoundedCornerShape(ChilltraxTheme.CORNER_RADIUS.dp))
             .background(Color(0xFF141414))
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center

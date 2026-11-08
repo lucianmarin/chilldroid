@@ -188,26 +188,22 @@ private fun CurrentSongInfoPanel(
             .fillMaxWidth()
             .height(ChilltraxTheme.HEADER_SECTION_HEIGHT.dp)
             .background(MaterialTheme.colorScheme.surface)
-            .padding(horizontal = 14.dp),
+            .padding(horizontal = ChilltraxTheme.HORIZONTAL_PADDING.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (showCover) {
             val isDark = isSystemInDarkTheme()
             val placeholderBackground = ChilltraxTheme.visualizerBackground(isDark)
             val placeholderNoteTint = ChilltraxTheme.visualizerContrastColor(isDark)
+            val coverCornerShape = RoundedCornerShape(12.dp)
 
             // 60x60 dp Album Artwork with `music_note_2` replacing the Apple logo
             Box(
                 modifier = Modifier
                     .size(60.dp)
-                    .shadow(4.dp, RoundedCornerShape(10.dp))
-                    .clip(RoundedCornerShape(10.dp))
+                    .shadow(4.dp, coverCornerShape)
+                    .clip(coverCornerShape)
                     .background(placeholderBackground)
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.14f),
-                        shape = RoundedCornerShape(10.dp)
-                    )
                     .clickable(enabled = canOpenAppleMusic, onClick = onOpenAppleMusic),
                 contentAlignment = Alignment.Center
             ) {
@@ -322,7 +318,7 @@ private fun CurrentSongInfoPanel(
             ) {
                 Text(
                     text = albumText,
-                    fontSize = 11.sp,
+                    fontSize = 12.sp,
                     lineHeight = 14.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
@@ -362,7 +358,7 @@ private fun BottomAppControlsBar(
     onSelectVisualizerMode: (VisualizerMode) -> Unit
 ) {
     val controlButtonHeight = ChilltraxTheme.CONTROL_BUTTON_HEIGHT.dp
-    val controlButtonShape = RoundedCornerShape(ChilltraxTheme.CONTROL_BUTTON_CORNER_RADIUS.dp)
+    val controlButtonShape = RoundedCornerShape(ChilltraxTheme.CORNER_RADIUS.dp)
 
     Row(
         modifier = Modifier
@@ -370,7 +366,7 @@ private fun BottomAppControlsBar(
             .background(MaterialTheme.colorScheme.surface)
             .navigationBarsPadding()
             .height(ChilltraxTheme.CONTROLS_BAR_HEIGHT.dp)
-            .padding(horizontal = 12.dp),
+            .padding(horizontal = ChilltraxTheme.HORIZONTAL_PADDING.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -381,7 +377,7 @@ private fun BottomAppControlsBar(
                 .clip(controlButtonShape)
                 .background(statusDotColor.copy(alpha = 0.14f))
                 .clickable(onClick = onStatusTap)
-                .padding(horizontal = 10.dp),
+                .padding(horizontal = 10.dp, vertical = 1.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
@@ -424,7 +420,7 @@ private fun BottomAppControlsBar(
                             if (isSelected) ChilltraxTheme.AccentRed else Color.Transparent
                         )
                         .clickable { onSelectVisualizerMode(tabMode) }
-                        .padding(horizontal = 9.dp),
+                        .padding(horizontal = 9.dp, vertical = 1.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
@@ -436,7 +432,7 @@ private fun BottomAppControlsBar(
                     )
                     Text(
                         text = tabMode.title,
-                        fontSize = 10.sp,
+                        fontSize = 11.sp,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                         color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
                     )
