@@ -107,18 +107,18 @@ data class StationStream(
     companion object {
         val defaultChilltraxStreams: List<StationStream> = listOf(
             StationStream(
-                id = "chilltrax-ssl-eu",
-                name = "Chilltrax SSL Stream (Direct)",
-                urlString = "https://streamssleu.chilltrax.com/stream?sid=1",
-                formatDescription = "128 Kbps MP3 (HTTPS)",
-                isBuiltIn = true,
-                station = RadioStation.CHILLTRAX
-            ),
-            StationStream(
                 id = "chilltrax-web-redirect",
                 name = "Chilltrax Web Player Stream",
                 urlString = "https://www.chilltrax.com/listen/?mode=redirect",
                 formatDescription = "128 Kbps MP3 (Web Redirect)",
+                isBuiltIn = true,
+                station = RadioStation.CHILLTRAX
+            ),
+            StationStream(
+                id = "chilltrax-ssl-eu",
+                name = "Chilltrax SSL Stream (Direct)",
+                urlString = "https://streamssleu.chilltrax.com/stream?sid=1",
+                formatDescription = "128 Kbps MP3 (HTTPS)",
                 isBuiltIn = true,
                 station = RadioStation.CHILLTRAX
             ),
@@ -166,18 +166,18 @@ data class StationStream(
 
         val defaultRadioDanzStreams: List<StationStream> = listOf(
             StationStream(
-                id = "radiodanz-ssl-live",
-                name = "Radio Danz SSL Stream (Direct)",
-                urlString = "https://streamssl.radiodanz.com/live",
-                formatDescription = "128 Kbps MP3 (HTTPS)",
-                isBuiltIn = true,
-                station = RadioStation.RADIO_DANZ
-            ),
-            StationStream(
                 id = "radiodanz-web-redirect",
                 name = "Radio Danz Web Player Stream",
                 urlString = "https://www.radiodanz.com/results/?mode=redirect",
                 formatDescription = "128 Kbps MP3 (Web Redirect)",
+                isBuiltIn = true,
+                station = RadioStation.RADIO_DANZ
+            ),
+            StationStream(
+                id = "radiodanz-ssl-live",
+                name = "Radio Danz SSL Stream (Direct)",
+                urlString = "https://streamssl.radiodanz.com/live",
+                formatDescription = "128 Kbps MP3 (HTTPS)",
                 isBuiltIn = true,
                 station = RadioStation.RADIO_DANZ
             ),
@@ -230,10 +230,25 @@ data class StationStream(
             RadioStation.RADIO_DANZ -> defaultRadioDanzStreams
         }
 
-        fun defaultStream(station: RadioStation): StationStream =
-            defaultStreams(station = station).first()
+        fun preferredDefaultStream(
+            station: RadioStation,
+            streams: List<StationStream> = defaultStreams(station = station)
+        ): StationStream {
+            val stationStreams = streams.filter { it.station == station }
+            val candidates = stationStreams.ifEmpty { defaultStreams(station = station) }
+            val fallbackCandidates = defaultStreams(station = station).filter {
+                !it.urlString.contains("redirect", ignoreCase = true)
+            }
+            return candidates.firstOrNull { it.urlString.contains("redirect", ignoreCase = true) }
+                ?: candidates.firstOrNull { !it.urlString.contains("redirect", ignoreCase = true) }
+                ?: fallbackCandidates.firstOrNull()
+                ?: defaultStreams(station = station).first()
+        }
 
-        val defaultStream: StationStream = defaultChilltraxStreams.first()
+        fun defaultStream(station: RadioStation): StationStream =
+            preferredDefaultStream(station = station)
+
+        val defaultStream: StationStream = defaultStream(station = RadioStation.CHILLTRAX)
     }
 }
 

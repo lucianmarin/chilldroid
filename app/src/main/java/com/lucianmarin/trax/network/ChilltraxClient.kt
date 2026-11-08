@@ -149,13 +149,16 @@ class ChilltraxClient(
 
         val plsCandidates = streams.filter { stream ->
             val lower = stream.urlString.lowercase()
-            lower.endsWith("/listen") || lower.contains(".pls")
+            (lower.endsWith("/listen") || lower.contains(".pls")) && !lower.contains("redirect")
         }
+        val insertIndex = streams.indexOfFirst { it.urlString.contains("redirect", ignoreCase = true) }
+            .let { if (it >= 0) it + 1 else 0 }
+        var offset = 0
         for (plsStream in plsCandidates) {
             val resolvedURL = runCatching { resolvePLSStreamURL(plsStream.urlString) }.getOrNull()
             if (resolvedURL != null && streams.none { it.urlString == resolvedURL }) {
                 streams.add(
-                    0,
+                    insertIndex + offset,
                     StationStream(
                         id = "discovered-${station.rawValue}-${resolvedURL.hashCode()}",
                         name = "${station.displayName} Discovered SSL Stream",
@@ -165,6 +168,7 @@ class ChilltraxClient(
                         station = station
                     )
                 )
+                offset += 1
             }
         }
 

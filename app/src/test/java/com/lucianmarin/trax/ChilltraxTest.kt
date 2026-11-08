@@ -93,6 +93,35 @@ class ChilltraxTest {
     }
 
     @Test
+    fun defaultStreamPrefersRedirectURLAndFallsBackToSecondBestOption() {
+        val chilltraxDefault = StationStream.defaultStream(station = RadioStation.CHILLTRAX)
+        assertTrue(chilltraxDefault.urlString.contains("redirect", ignoreCase = true))
+        assertEquals("https://www.chilltrax.com/listen/?mode=redirect", chilltraxDefault.urlString)
+
+        val radioDanzDefault = StationStream.defaultStream(station = RadioStation.RADIO_DANZ)
+        assertTrue(radioDanzDefault.urlString.contains("redirect", ignoreCase = true))
+        assertEquals("https://www.radiodanz.com/results/?mode=redirect", radioDanzDefault.urlString)
+
+        val chilltraxWithoutRedirect = StationStream.defaultChilltraxStreams.filter {
+            !it.urlString.contains("redirect", ignoreCase = true)
+        }
+        val chilltraxFallback = StationStream.preferredDefaultStream(
+            station = RadioStation.CHILLTRAX,
+            streams = chilltraxWithoutRedirect
+        )
+        assertEquals("https://streamssleu.chilltrax.com/stream?sid=1", chilltraxFallback.urlString)
+
+        val radioDanzWithoutRedirect = StationStream.defaultRadioDanzStreams.filter {
+            !it.urlString.contains("redirect", ignoreCase = true)
+        }
+        val radioDanzFallback = StationStream.preferredDefaultStream(
+            station = RadioStation.RADIO_DANZ,
+            streams = radioDanzWithoutRedirect
+        )
+        assertEquals("https://streamssl.radiodanz.com/live", radioDanzFallback.urlString)
+    }
+
+    @Test
     fun parseAPIEndpointsFromStationHTML() {
         val sampleHTML = """
             <script>

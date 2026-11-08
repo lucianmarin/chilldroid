@@ -304,8 +304,7 @@ class AppState(
             null
         }
         _selectedStream.value = matchedStream
-            ?: availableStreams.firstOrNull { it.station == savedStation }
-            ?: StationStream.defaultStream(station = savedStation)
+            ?: StationStream.preferredDefaultStream(station = savedStation, streams = availableStreams)
 
         val savedVisMode = VisualizerMode.fromRawValue(preferences.getString(KEY_VISUALIZER_MODE))
         _visualizerMode.value = savedVisMode
@@ -571,8 +570,10 @@ class AppState(
         preferences.putString(KEY_SELECTED_STATION, station.rawValue)
 
         if (selectedStream.station != station) {
-            val preferred = availableStreams.firstOrNull { it.station == station }
-                ?: StationStream.defaultStream(station = station)
+            val preferred = StationStream.preferredDefaultStream(
+                station = station,
+                streams = availableStreams
+            )
             selectedStream = preferred
             preferences.putString(KEY_SELECTED_STREAM_ID, preferred.id)
         }
