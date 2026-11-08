@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -67,6 +68,7 @@ fun CompactPlayerScreen(
 ) {
     val currentSong by appState.currentSongFlow.collectAsState()
     val visualizerMode by appState.visualizerModeFlow.collectAsState()
+    val showCover by appState.fetchAlbumCoverFromChilltraxFlow.collectAsState()
     val isPlaying by appState.radioPlayer.isPlayingFlow.collectAsState()
     val playbackStatus by appState.radioPlayer.statusFlow.collectAsState()
     val selectedStation by appState.selectedStationFlow.collectAsState()
@@ -119,6 +121,7 @@ fun CompactPlayerScreen(
             CurrentSongInfoPanel(
                 currentSong = currentSong,
                 isPlaying = isPlaying,
+                showCover = showCover,
                 canOpenAppleMusic = isPlaying && currentSong.appleMusicURL != null,
                 canCopySong = isPlaying && currentSong.isMeaningfulTrack,
                 appState = appState,
@@ -158,6 +161,7 @@ fun CompactPlayerScreen(
 private fun CurrentSongInfoPanel(
     currentSong: SongMetadata,
     isPlaying: Boolean,
+    showCover: Boolean,
     canOpenAppleMusic: Boolean,
     canCopySong: Boolean,
     appState: AppState,
@@ -166,7 +170,7 @@ private fun CurrentSongInfoPanel(
     onCopyCurrentSong: () -> Unit,
     onTogglePlayPause: () -> Unit
 ) {
-    val coverURLString = currentSong.coverURL
+    val coverURLString = if (isPlaying && showCover) currentSong.coverURL else null
     val cachedBitmap = remember(coverURLString, cacheRevision) {
         val bytes = appState.coverCache.cachedBytes(coverURLString) ?: return@remember null
         runCatching { BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap() }.getOrNull()
@@ -186,68 +190,72 @@ private fun CurrentSongInfoPanel(
             .padding(horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // 60x60 dp Album Artwork with `music_note_2` replacing the Apple logo
-        Box(
-            modifier = Modifier
-                .size(60.dp)
-                .shadow(4.dp, RoundedCornerShape(10.dp))
-                .clip(RoundedCornerShape(10.dp))
-                .background(Color.Black)
-                .border(
-                    width = 1.dp,
-                    color = Color.White.copy(alpha = 0.14f),
-                    shape = RoundedCornerShape(10.dp)
-                )
-                .clickable(enabled = canOpenAppleMusic, onClick = onOpenAppleMusic),
-            contentAlignment = Alignment.Center
-        ) {
-            if (cachedBitmap != null) {
-                Image(
-                    bitmap = cachedBitmap,
-                    contentDescription = "Open on Apple Music",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-                if (canOpenAppleMusic) {
+        if (showCover) {
+            // 60x60 dp Album Artwork with `music_note_2` replacing the Apple logo
+            Box(
+                modifier = Modifier
+                    .size(60.dp)
+                    .shadow(4.dp, RoundedCornerShape(10.dp))
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(Color.Black)
+                    .border(
+                        width = 1.dp,
+                        color = Color.White.copy(alpha = 0.14f),
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .clickable(enabled = canOpenAppleMusic, onClick = onOpenAppleMusic),
+                contentAlignment = Alignment.Center
+            ) {
+                if (cachedBitmap != null) {
+                    Image(
+                        bitmap = cachedBitmap,
+                        contentDescription = "Open on Apple Music",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    if (canOpenAppleMusic) {
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(3.dp)
+                                .size(18.dp)
+                                .clip(CircleShape)
+                                .background(Color.Black.copy(alpha = 0.65f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = ChilltraxIcons.MusicNote2,
+                                contentDescription = "Music Note 2",
+                                tint = Color.White,
+                                modifier = Modifier.size(11.dp)
+                            )
+                        }
+                    }
+                } else {
+                    // Default station artwork rendered from icon.svg + Music Note 2 icon replacing Apple logo
+                    ChilltraxIconSvgCanvas(modifier = Modifier.fillMaxSize())
                     Box(
                         modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(3.dp)
-                            .size(18.dp)
-                            .clip(CircleShape)
-                            .background(Color.Black.copy(alpha = 0.65f)),
+                            .fillMaxSize()
+                            .padding(end = 15.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = ChilltraxIcons.MusicNote2,
                             contentDescription = "Music Note 2",
                             tint = Color.White,
-                            modifier = Modifier.size(11.dp)
+                            modifier = Modifier.size(24.dp)
                         )
                     }
                 }
-            } else {
-                // Default station artwork rendered from icon.svg + Music Note 2 icon replacing Apple logo
-                ChilltraxIconSvgCanvas(modifier = Modifier.fillMaxSize())
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(end = 15.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = ChilltraxIcons.MusicNote2,
-                        contentDescription = "Music Note 2",
-                        tint = Color.White,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
             }
+
+            Spacer(modifier = Modifier.width(12.dp))
         }
 
-        Spacer(modifier = Modifier.width(12.dp))
-
         // Song Title, Artist, Album/Mix (equal height to the 60dp album cover)
+        val onePxThickness = with(LocalDensity.current) { 1.toDp() }
+        val dividerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.10f)
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -279,6 +287,7 @@ private fun CurrentSongInfoPanel(
                     overflow = TextOverflow.Ellipsis
                 )
             }
+            HorizontalDivider(thickness = onePxThickness, color = dividerColor)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -296,6 +305,7 @@ private fun CurrentSongInfoPanel(
                     overflow = TextOverflow.Ellipsis
                 )
             }
+            HorizontalDivider(thickness = onePxThickness, color = dividerColor)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

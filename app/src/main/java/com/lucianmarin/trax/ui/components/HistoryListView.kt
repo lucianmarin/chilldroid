@@ -64,6 +64,7 @@ fun HistorySearchAndListSection(
     val historyCommitCount by appState.historyCommitCountFlow.collectAsState()
     val displayLimit by appState.historyDisplayLimitFlow.collectAsState()
     val copiedID by appState.copiedHistoryEntryIDFlow.collectAsState()
+    val showCover by appState.fetchAlbumCoverFromChilltraxFlow.collectAsState()
     val isSettingsVisible by appState.isSettingsVisibleFlow.collectAsState()
     val cacheRevision by appState.coverCache.revision.collectAsState()
     val listState = rememberLazyListState()
@@ -229,6 +230,7 @@ fun HistorySearchAndListSection(
                         val badgeLabel = if (copiedID == entry.id) "COPY" else entry.stationBadgeLabel
                         HistoryRowItem(
                             entry = entry,
+                            showCover = showCover,
                             coverCache = appState.coverCache,
                             cacheRevision = cacheRevision,
                             badgeLabel = badgeLabel,
@@ -261,6 +263,7 @@ fun HistorySearchAndListSection(
 @Composable
 private fun HistoryRowItem(
     entry: SongHistoryEntry,
+    showCover: Boolean,
     coverCache: AlbumCoverCache,
     cacheRevision: Int,
     badgeLabel: String,
@@ -276,14 +279,16 @@ private fun HistoryRowItem(
             .padding(horizontal = 14.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        HistoryCoverThumbnail(
-            coverURLString = entry.coverURL,
-            coverCache = coverCache,
-            cacheRevision = cacheRevision,
-            onClick = onCoverClick
-        )
+        if (showCover) {
+            HistoryCoverThumbnail(
+                coverURLString = entry.coverURL,
+                coverCache = coverCache,
+                cacheRevision = cacheRevision,
+                onClick = onCoverClick
+            )
 
-        Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(10.dp))
+        }
 
         Column(modifier = Modifier.weight(1f)) {
             Text(

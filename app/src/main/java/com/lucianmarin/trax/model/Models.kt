@@ -348,9 +348,9 @@ data class SongMetadata(
 
     companion object {
         val placeholder: SongMetadata = SongMetadata(
-            artist = "Artist",
-            title = "Title",
-            albumOrMix = "Album",
+            artist = "",
+            title = "",
+            albumOrMix = "",
             label = "",
             year = ""
         )
