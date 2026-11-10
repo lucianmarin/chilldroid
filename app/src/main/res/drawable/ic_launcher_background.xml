@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generated from icon.svg: left 3/4 black (#000000), right 1/4 4-tier vertical blocks (#FA0000, #FF5252, #FFA8A8, #FFFFFF)
+<!-- Generated from white.svg: left 3/4 white (#FFFFFF), right 1/4 4-tier vertical blocks (#FF0505, #AD0000, #570000, #000000)
      Mapped into the 66dp/108dp adaptive icon safe zone (with full-bleed edge extension for outer mask shapes). -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -8,41 +8,41 @@
     android:viewportHeight="240">
     <!-- Full-bleed edge extension so outer adaptive mask corners match the adjacent block colors -->
     <path
-        android:fillColor="#000000"
+        android:fillColor="#FFFFFF"
         android:pathData="M0,0H167V240H0Z" />
     <path
-        android:fillColor="#FA0000"
+        android:fillColor="#FF0505"
         android:pathData="M167,0H240V83H167Z" />
     <path
-        android:fillColor="#FF5252"
+        android:fillColor="#AD0000"
         android:pathData="M167,83H240V120H167Z" />
     <path
-        android:fillColor="#FFA8A8"
+        android:fillColor="#570000"
         android:pathData="M167,120H240V157H167Z" />
     <path
-        android:fillColor="#FFFFFF"
+        android:fillColor="#000000"
         android:pathData="M167,157H240V240H167Z" />
 
-    <!-- Exact 240x240 icon.svg layout scaled inside the 66/108 adaptive safe zone -->
+    <!-- Exact 240x240 white.svg layout scaled inside the 66/108 adaptive safe zone -->
     <group
         android:pivotX="120"
         android:pivotY="120"
         android:scaleX="0.6111"
         android:scaleY="0.6111">
         <path
-            android:fillColor="#FFFFFF"
+            android:fillColor="#000000"
             android:pathData="M180,180H240V240H180Z" />
         <path
-            android:fillColor="#FFA8A8"
+            android:fillColor="#570000"
             android:pathData="M180,120H240V180H180Z" />
         <path
-            android:fillColor="#FF5252"
+            android:fillColor="#AD0000"
             android:pathData="M180,60H240V120H180Z" />
         <path
-            android:fillColor="#FA0000"
+            android:fillColor="#FF0505"
             android:pathData="M180,0H240V60H180Z" />
         <path
-            android:fillColor="#000000"
+            android:fillColor="#FFFFFF"
             android:pathData="M0,0H180V240H0Z" />
     </group>
 </vector>

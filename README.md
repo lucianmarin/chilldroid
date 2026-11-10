@@ -43,7 +43,7 @@ All application settings are consolidated into a **single scrollable page** (ins
   - *Clear Cache & History* button.
 
 ### 3. Iconography & App Icon
-- **App Launcher Icon**: Generated directly from `../chilltrax/icon.svg` (`icon.svg` in repo root) as Android adaptive launcher icons (`ic_launcher_background.xml`, `ic_launcher_foreground.xml`, `ic_launcher_monochrome.xml`) with the exact `#000000` left 3/4 panel, right 1/4 four-tier vertical color blocks (`#FA0000`, `#FF5252`, `#FFA8A8`, `#FFFFFF`), and white concentric radio wave paths.
+- **App Launcher Icon**: Generated directly from `white.svg` as Android adaptive launcher icons (`ic_launcher_background.xml`, `ic_launcher_foreground.xml`, `ic_launcher_monochrome.xml`) with the exact `#FFFFFF` left 3/4 panel, right 1/4 four-tier vertical color blocks (`#FF0505`, `#AD0000`, `#570000`, `#000000`), and black `music_note_2` symbol.
 - **Google Fonts Material Symbols**:
   - `music_note_2` (**Music Note 2**): Replaces the Apple logo on the default station artwork and album cover action overlay.
   - `music_note` (**Music Note**): Used for song history results placeholder artwork.
