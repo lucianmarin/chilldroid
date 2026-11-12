@@ -20,9 +20,12 @@ enum class PanelSection(val orderFromBottom: Int, val label: String) {
 object ChilltraxTheme {
     // Exact colors from `icon.svg`
     val AccentRed = Color(0xFFFA0000)
+    val DarkAccentRed = Color(0xFFFF0505)
     val LiveGreen = Color(0xFF34C759)
     val CoralRed = Color(0xFFFF5252)
+    val DarkCoralRed = Color(0xFFAD0000)
     val SoftPink = Color(0xFFFFA8A8)
+    val DarkSoftPink = Color(0xFF570000)
     val VisualizerGray = Color(0xFF808080)
     val VisualizerBlack = Color(0xFF000000)
     val VisualizerWhite = Color(0xFFFFFFFF)

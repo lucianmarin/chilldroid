@@ -345,17 +345,12 @@ class ChilltraxTest {
         assertEquals("Waveform", VisualizerMode.WAVEFORM.title)
         assertEquals("Spectrum", VisualizerMode.SPECTRUM.title)
 
-        // Verify Google Fonts Material Symbols icons mapping:
-        // - Music Note 2 (music_note_2) replacing Apple logo
-        // - Music Note (music_note) for history results
-        // - Vital Signs (vital_signs) for waveform visualizer
-        // - Bar Chart 4 Bars (bar_chart_4_bars) for spectrum visualizer
-        // - Settings Slow Motion (settings_slow_motion) for settings
-        assertEquals("music_note_2", ChilltraxIcons.MusicNote2.name)
-        assertEquals("music_note", ChilltraxIcons.MusicNote.name)
-        assertEquals("vital_signs", ChilltraxIcons.VitalSigns.name)
-        assertEquals("bar_chart_4_bars", ChilltraxIcons.BarChart4Bars.name)
-        assertEquals("settings_slow_motion", ChilltraxIcons.SettingsSlowMotion.name)
+        // Verify native Material Icons mapping:
+        assertEquals("Filled.MusicNote", ChilltraxIcons.MusicNote2.name)
+        assertEquals("Filled.MusicNote", ChilltraxIcons.MusicNote.name)
+        assertEquals("Filled.GraphicEq", ChilltraxIcons.VitalSigns.name)
+        assertEquals("Filled.Equalizer", ChilltraxIcons.BarChart4Bars.name)
+        assertEquals("Filled.Settings", ChilltraxIcons.SettingsSlowMotion.name)
         assertEquals("vital_signs", VisualizerMode.WAVEFORM.googleFontIconName)
         assertEquals("bar_chart_4_bars", VisualizerMode.SPECTRUM.googleFontIconName)
     }
@@ -765,7 +760,7 @@ class ChilltraxTest {
                 startPollingAutomatically = false
             )
 
-            assertEquals("stop", ChilltraxIcons.StopFilled.name)
+            assertEquals("Filled.Stop", ChilltraxIcons.StopFilled.name)
 
             // Idle player does not run visualizer timer
             assertFalse(state.radioPlayer.isVisualizerTimerRunning)
