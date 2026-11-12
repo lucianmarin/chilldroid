@@ -6,7 +6,7 @@ Light              |Dark
 :-----------------:|:---------------:
 ![light](light.jpg)|![dark](dark.jpg)
 
-Native Android application (`app_name`: `Chilltrax`, `applicationId`: `com.lucianmarin.trax`) built with **Kotlin** and **Jetpack Compose** (Material 3) for streaming **Chilltrax** ("The World's Chillout Channel") and **Radio Danz** ("The World's Dance Music Channel"). Modeled after the `../chilltrax` macOS app with an **inverted bottom-to-top panel layout**, **single-page settings**, and **Google Fonts Material Symbols** iconography.
+Native Android application (`app_name`: `Chilltrax`, `applicationId`: `com.lucianmarin.trax`) built with **Kotlin** and **Jetpack Compose** (Material 3) for streaming **Chilltrax** ("The World's Chillout Channel") and **Radio Danz** ("The World's Dance Music Channel"). Modeled after the `../mactrax` macOS app with an **inverted bottom-to-top panel layout**, **single-page settings**, and **Google Fonts Material Symbols** iconography.
 
 ---
 
@@ -27,7 +27,7 @@ The main player screen stacks its four panels from bottom to top:
      - **Title** (16sp bold, 1 line): Tapping while playing copies `"Artist - Title"` to the clipboard and highlights the matching history item badge as `COPY`.
      - **Artist** (13sp medium, `#FA0000` red when playing): Tapping while playing copies `"Artist - Title"` to the clipboard.
      - **Album / Mix** (11sp secondary, 1 line).
-   - **Play / Pause Button**: 44×44 dp `#FA0000` red circle button with white play/pause icon.
+   - **Play / Stop Button**: 44×44 dp `#FA0000` red circle button with white play/stop icon (stops and releases the live stream when tapped so nothing buffers in the background).
 3. **Above Current Song Info — Audio Visualizer Panel**:
    - Full-bleed 68 dp tall real-time 56-bar audio visualizer synced to playback intensity (or collapsed to `0 dp` when the **No Info / Off** segment is selected).
    - **Waveform (`Vital Signs`)**: Multi-ribbon layered sine waveform (`#808080` gray outer ribbon, black/white contrast mid ribbon, `#FA0000` red core ribbon).
@@ -72,7 +72,7 @@ All application settings are consolidated into a **single scrollable page** (ins
 ## Implementation Tracker
 
 - [x] Track project specifications in `README.md`
-- [x] Copy `../chilltrax/icon.svg` and generate Android adaptive icon drawables
+- [x] Copy `../mactrax/icon.svg` and generate Android adaptive icon drawables
 - [x] Configure Gradle project (`applicationId = "com.lucianmarin.trax"`, `AGP 9.5.1`, `Kotlin 2.2.10`, Jetpack Compose Material 3, Coroutines, Kotlinx Serialization, OkHttp)
 - [x] Implement Google Fonts Material Symbols vector icons (`music_note_2`, `music_note`, `bar_chart_4_bars`, `vital_signs`, `settings_slow_motion`)
 - [x] Implement data models (`RadioStation`, `VisualizerMode`, `StationStream`, `StationAPIEndpoints`, `SongMetadata`, `SongHistoryEntry`)

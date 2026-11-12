@@ -73,9 +73,6 @@ fun CompactPlayerScreen(
     val isPlaying by appState.radioPlayer.isPlayingFlow.collectAsState()
     val playbackStatus by appState.radioPlayer.statusFlow.collectAsState()
     val selectedStation by appState.selectedStationFlow.collectAsState()
-    val levels by appState.radioPlayer.visualizerLevelsFlow.collectAsState()
-    val trailLevels by appState.radioPlayer.visualizerTrailLevelsFlow.collectAsState()
-    val phase by appState.radioPlayer.waveformPhaseFlow.collectAsState()
     val cacheRevision by appState.coverCache.revision.collectAsState()
 
     val statusText = remember(playbackStatus, selectedStation) {
@@ -104,15 +101,10 @@ fun CompactPlayerScreen(
             // 3. ABOVE SONG INFO: Visualizer Panel (Waveform or Spectrum; hidden when OFF / No Info)
             if (visualizerMode != VisualizerMode.OFF) {
                 HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
-                VisualizerView(
+                ActiveVisualizerSection(
+                    appState = appState,
                     mode = visualizerMode,
-                    levels = levels,
-                    trailLevels = trailLevels,
-                    phase = phase,
-                    isPlaying = isPlaying,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(ChilltraxTheme.VISUALIZER_SECTION_HEIGHT.dp)
+                    isPlaying = isPlaying
                 )
             }
 
@@ -329,7 +321,7 @@ private fun CurrentSongInfoPanel(
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        // Play / Pause Button (#FA0000 red circle)
+        // Play / Stop Button (#FA0000 red circle)
         Box(
             modifier = Modifier
                 .size(44.dp)
@@ -340,13 +332,35 @@ private fun CurrentSongInfoPanel(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = if (isPlaying) ChilltraxIcons.PauseFilled else ChilltraxIcons.PlayArrowFilled,
-                contentDescription = if (isPlaying) "Pause" else "Play",
+                imageVector = if (isPlaying) ChilltraxIcons.StopFilled else ChilltraxIcons.PlayArrowFilled,
+                contentDescription = if (isPlaying) "Stop" else "Play",
                 tint = Color.White,
                 modifier = Modifier.size(22.dp)
             )
         }
     }
+}
+
+@Composable
+private fun ActiveVisualizerSection(
+    appState: AppState,
+    mode: VisualizerMode,
+    isPlaying: Boolean
+) {
+    val levels by appState.radioPlayer.visualizerLevelsFlow.collectAsState()
+    val trailLevels by appState.radioPlayer.visualizerTrailLevelsFlow.collectAsState()
+    val phase by appState.radioPlayer.waveformPhaseFlow.collectAsState()
+
+    VisualizerView(
+        mode = mode,
+        levels = levels,
+        trailLevels = trailLevels,
+        phase = phase,
+        isPlaying = isPlaying,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(ChilltraxTheme.VISUALIZER_SECTION_HEIGHT.dp)
+    )
 }
 
 @Composable

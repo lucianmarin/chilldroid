@@ -750,4 +750,47 @@ class ChilltraxTest {
             tempDir.deleteRecursively()
         }
     }
+
+    @Test
+    fun visualizerTimerStopsWhenOffOrNotPlayingAndStopTearsDownStream() {
+        val tempDir = Files.createTempDirectory("ChilldroidVisualizerTimerTests-${UUID.randomUUID()}").toFile()
+        try {
+            val player = RadioPlayer(enableNativeMediaPlayer = false)
+            val state = AppState(
+                client = ChilltraxClient(),
+                historyStore = CompressedHistoryStore(file = File(tempDir, "history.tsv.gz")),
+                coverCache = AlbumCoverCache(directory = File(tempDir, "Covers")),
+                radioPlayer = player,
+                preferences = InMemoryPreferencesStore(),
+                startPollingAutomatically = false
+            )
+
+            assertEquals("stop", ChilltraxIcons.StopFilled.name)
+
+            // Idle player does not run visualizer timer
+            assertFalse(state.radioPlayer.isVisualizerTimerRunning)
+
+            // Playing with visualizer enabled runs timer
+            state.selectVisualizerMode(VisualizerMode.SPECTRUM)
+            player.setSimulatedPlaybackStateForTesting(isPlaying = true, status = PlaybackStatus.PLAYING)
+            assertTrue(state.radioPlayer.isVisualizerTimerRunning)
+
+            // Turning visualizer OFF stops timer immediately even while playing
+            state.selectVisualizerMode(VisualizerMode.OFF)
+            assertFalse(state.radioPlayer.isVisualizerTimerRunning)
+
+            // Turning visualizer back on resumes timer while playing
+            state.selectVisualizerMode(VisualizerMode.WAVEFORM)
+            assertTrue(state.radioPlayer.isVisualizerTimerRunning)
+
+            // Toggling play/stop stops playback, resets status to IDLE (READY), and stops timer
+            state.togglePlayPause()
+            assertFalse(state.radioPlayer.isPlaying)
+            assertEquals(PlaybackStatus.IDLE, state.radioPlayer.status)
+            assertEquals("READY", state.toolbarStatusLabel)
+            assertFalse(state.radioPlayer.isVisualizerTimerRunning)
+        } finally {
+            tempDir.deleteRecursively()
+        }
+    }
 }

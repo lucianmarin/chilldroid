@@ -174,6 +174,7 @@ class AppState(
         get() = _visualizerMode.value
         private set(value) {
             _visualizerMode.value = value
+            radioPlayer.isVisualizerEnabled = (value != VisualizerMode.OFF)
         }
 
     private var lastActiveVisualizerMode: VisualizerMode = VisualizerMode.SPECTRUM
@@ -297,6 +298,7 @@ class AppState(
 
         val savedVisMode = VisualizerMode.fromRawValue(preferences.getString(KEY_VISUALIZER_MODE))
         _visualizerMode.value = savedVisMode
+        radioPlayer.isVisualizerEnabled = (savedVisMode != VisualizerMode.OFF)
 
         val savedLastActive = VisualizerMode.fromRawValue(preferences.getString(KEY_LAST_ACTIVE_VISUALIZER_MODE))
         lastActiveVisualizerMode = if (savedLastActive != VisualizerMode.OFF) {
@@ -431,7 +433,7 @@ class AppState(
 
     fun togglePlayPause() {
         if (radioPlayer.isPlaying) {
-            radioPlayer.pause()
+            radioPlayer.stop()
         } else {
             playSelectedStation()
         }
@@ -997,7 +999,9 @@ class AppState(
             while (isActive) {
                 delay(15_000L)
                 if (!isActive) break
-                refreshNowPlaying()
+                if (radioPlayer.isPlaying) {
+                    refreshNowPlaying()
+                }
             }
         }
     }

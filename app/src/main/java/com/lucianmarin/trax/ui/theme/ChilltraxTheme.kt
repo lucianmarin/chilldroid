@@ -40,7 +40,7 @@ object ChilltraxTheme {
     // Compact layout dimensions matching `../chilltrax`
     const val COMPACT_WIDTH = 452f
     const val HEADER_SECTION_HEIGHT = 80f
-    const val VISUALIZER_SECTION_HEIGHT = 70f
+    const val VISUALIZER_SECTION_HEIGHT = 80f
     const val CONTROLS_BAR_HEIGHT = 50f
     const val CONTROL_BUTTON_HEIGHT = 32f
     const val CORNER_RADIUS = 8f

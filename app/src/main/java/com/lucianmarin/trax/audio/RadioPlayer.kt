@@ -87,6 +87,16 @@ class RadioPlayer(
             _waveformPhase.value = value
         }
 
+    var isVisualizerEnabled: Boolean = true
+        set(value) {
+            if (field == value) return
+            field = value
+            updateVisualizerTimerState()
+        }
+
+    val isVisualizerTimerRunning: Boolean
+        get() = visualizerJob?.isActive == true
+
     var onICYStreamTitle: ((String) -> Unit)? = null
 
     private var mediaPlayer: MediaPlayer? = null
@@ -162,7 +172,7 @@ class RadioPlayer(
         if (!enableNativeMediaPlayer) {
             status = PlaybackStatus.PLAYING
             isPlaying = true
-            startVisualizerTimer()
+            updateVisualizerTimerState()
             return
         }
 
@@ -184,17 +194,20 @@ class RadioPlayer(
                     player.start()
                     isPlaying = true
                     status = PlaybackStatus.PLAYING
+                    updateVisualizerTimerState()
                 }
                 mp.setOnInfoListener { _, what, _ ->
                     when (what) {
                         MediaPlayer.MEDIA_INFO_BUFFERING_START -> if (isPlaying) status = PlaybackStatus.CONNECTING
                         MediaPlayer.MEDIA_INFO_BUFFERING_END -> if (isPlaying) status = PlaybackStatus.PLAYING
                     }
+                    updateVisualizerTimerState()
                     false
                 }
                 mp.setOnErrorListener { _, _, _ ->
                     isPlaying = false
                     status = PlaybackStatus.ERROR
+                    updateVisualizerTimerState()
                     true
                 }
                 mediaPlayer = mp
@@ -215,18 +228,20 @@ class RadioPlayer(
             }
         }
 
-        startVisualizerTimer()
+        updateVisualizerTimerState()
     }
 
     fun pause() {
-        runCatching { mediaPlayer?.pause() }
+        stopVisualizerTimer()
+        releaseMediaPlayer()
         isPlaying = false
         status = PlaybackStatus.PAUSED
+        resetVisualizerLevels()
     }
 
     fun togglePlayPause(defaultURLString: String) {
         if (isPlaying) {
-            pause()
+            stop()
         } else {
             play(currentStreamURLString ?: defaultURLString)
         }
@@ -235,18 +250,17 @@ class RadioPlayer(
     fun stop() {
         resumeOnFocusGain = false
         abandonAudioFocus()
-        visualizerJob?.cancel()
-        visualizerJob = null
+        stopVisualizerTimer()
         releaseMediaPlayer()
         isPlaying = false
         status = PlaybackStatus.IDLE
-        visualizerLevels = List(VISUALIZER_BAR_COUNT) { 0.04f }
-        visualizerTrailLevels = List(VISUALIZER_BAR_COUNT) { 0.04f }
+        resetVisualizerLevels()
     }
 
     fun setSimulatedPlaybackStateForTesting(isPlaying: Boolean, status: PlaybackStatus) {
         this.isPlaying = isPlaying
         this.status = status
+        updateVisualizerTimerState()
     }
 
     fun tickVisualizer() {
@@ -311,6 +325,16 @@ class RadioPlayer(
         visualizerTrailLevels = updated
     }
 
+    private fun updateVisualizerTimerState() {
+        val shouldRun = isVisualizerEnabled && isPlaying &&
+            (status == PlaybackStatus.PLAYING || status == PlaybackStatus.CONNECTING)
+        if (shouldRun) {
+            startVisualizerTimer()
+        } else {
+            stopVisualizerTimer()
+        }
+    }
+
     private fun startVisualizerTimer() {
         if (visualizerJob?.isActive == true) return
         visualizerJob = scope.launch {
@@ -318,6 +342,21 @@ class RadioPlayer(
                 tickVisualizer()
                 delay(45L)
             }
+        }
+    }
+
+    private fun stopVisualizerTimer() {
+        visualizerJob?.cancel()
+        visualizerJob = null
+    }
+
+    private fun resetVisualizerLevels() {
+        val idleLevels = List(VISUALIZER_BAR_COUNT) { 0.04f }
+        if (visualizerLevels != idleLevels) {
+            visualizerLevels = idleLevels
+        }
+        if (visualizerTrailLevels != idleLevels) {
+            visualizerTrailLevels = idleLevels
         }
     }
 

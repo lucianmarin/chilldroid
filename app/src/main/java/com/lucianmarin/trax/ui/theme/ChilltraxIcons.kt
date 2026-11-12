@@ -57,6 +57,9 @@ object ChilltraxIcons {
     const val PAUSE_FILLED_PATH_D =
         "M640,-200q-33,0 -56.5,-23.5T560,-280v-400q0,-33 23.5,-56.5T640,-760q33,0 56.5,23.5T720,-680v400q0,33 -23.5,56.5T640,-200Zm-320,0q-33,0 -56.5,-23.5T240,-280v-400q0,-33 23.5,-56.5T320,-760q33,0 56.5,23.5T400,-680v400q0,33 -23.5,56.5T320,-200Z"
 
+    const val STOP_FILLED_PATH_D =
+        "M240,-280v-400q0,-17 11.5,-28.5T280,-720h400q17,0 28.5,11.5T720,-680v400q0,17 -11.5,28.5T680,-240H280q-17,0 -28.5,-11.5T240,-280Z"
+
     const val SEARCH_PATH_D =
         "M380,-320q-109,0 -184.5,-75.5T120,-580q0,-109 75.5,-184.5T380,-840q109,0 184.5,75.5T640,-580q0,44 -14,83t-38,69l224,224q11,11 11,28t-11,28q-11,11 -28,11t-28,-11L532,-372q-30,24 -69,38t-83,14Zm0,-80q75,0 127.5,-52.5T560,-580q0,-75 -52.5,-127.5T380,-760q-75,0 -127.5,52.5T200,-580q0,75 52.5,127.5T380,-400Z"
 
@@ -99,6 +102,10 @@ object ChilltraxIcons {
 
     val PauseFilled: ImageVector by lazy {
         materialSymbolVector(name = "pause", pathData = PAUSE_FILLED_PATH_D)
+    }
+
+    val StopFilled: ImageVector by lazy {
+        materialSymbolVector(name = "stop", pathData = STOP_FILLED_PATH_D)
     }
 
     val Search: ImageVector by lazy {
