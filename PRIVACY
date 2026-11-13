@@ -1,0 +1,58 @@
+Privacy Policy for Chilltrax
+
+Effective Date: November 13, 2026
+Application: Chilltrax (Package ID: com.lucianmarin.trax)
+Developer: Lucian Marin
+
+1. Overview
+Chilltrax ("the App") is an Android radio player application developed by Lucian Marin for streaming the Chilltrax and Radio Danz internet radio stations. This Privacy Policy explains how the App handles information when you use it.
+
+In short: Chilltrax does not collect, transmit, rent, or sell any personal or sensitive user data. The App contains no user accounts, no analytics SDKs, no crash-reporting trackers, and no advertising networks.
+
+2. Personal Data Collection and Use
+We do not collect, store, or process any personally identifiable information (PII) or sensitive user data on any developer-controlled servers. Specifically, the App does not collect:
+- Names, email addresses, phone numbers, or account credentials
+- Precise or coarse device location data
+- Contacts, call logs, SMS, photos, microphone recordings, or camera data
+- Advertising identifiers (AAID), device fingerprinting, or usage analytics
+
+3. Local On-Device Data Storage
+All application data created during your use of Chilltrax is stored exclusively on your device within the App's private sandboxed storage:
+- App Preferences: Your selected radio station, active and custom broadcast stream URLs, visualizer mode, album artwork preference, and history commit timer are stored locally using Android SharedPreferences.
+- Song History (history.tsv.gz): Metadata for songs played while listening (artist, title, album/mix, year, station name, stream URL, cover URL, and playback timestamp) is saved locally on your device so you can browse and search your listening history.
+- Album Cover Cache (Covers/): Downloaded album artwork images are cached locally on your device to reduce network usage and display cover art in the player, history list, and media notification.
+
+Data Retention and Deletion:
+You have full control over all locally stored data. You can permanently delete all recorded song history and cached album covers at any time directly inside the App via Settings -> "Clear Cache & History", by clearing the App's storage in Android system settings, or by uninstalling the App. If Android Auto Backup is enabled on your device, your operating system may back up app data according to your device's Google backup settings.
+
+4. Network Connections and Third-Party Services
+To stream live radio audio and fetch song metadata and album artwork, the App makes direct HTTP/HTTPS requests from your device to the following third-party services:
+- Chilltrax (chilltrax.com and associated audio streaming servers) for live audio streams, playlist (.pls) resolution, now-playing track metadata, and cover image URLs.
+- Radio Danz (radiodanz.com and associated audio streaming servers) for live audio streams, playlist (.pls) resolution, now-playing track metadata, and cover image URLs.
+- Apple iTunes Search API (itunes.apple.com) to look up publicly available album cover artwork by song artist and title when album cover fetching is enabled (which can be disabled in Settings -> "Display and fetch album covers").
+- Custom Stream Servers if you manually add and play a custom broadcast stream URL in Settings.
+
+When your device connects to these third-party servers, standard network request metadata (such as your IP address and the App's User-Agent string "Chilltrax/1.0 (Android; Jetpack Compose)") is transmitted directly to those providers as part of normal internet communication. When you tap album artwork to view a song on Apple Music (music.apple.com), that link opens in your external browser or Apple Music app. Your interactions with those external services are governed by their respective privacy policies.
+
+5. Android Permissions Used
+Chilltrax requests only the minimum system permissions necessary for media streaming and playback controls:
+- INTERNET: Required to stream live radio audio and retrieve public song metadata and album cover artwork.
+- FOREGROUND_SERVICE and FOREGROUND_SERVICE_MEDIA_PLAYBACK: Required to keep audio streaming active while the App is in the background or the device screen is locked.
+- WAKE_LOCK: Required to prevent the processor and Wi-Fi connection from sleeping while live audio is actively playing.
+- POST_NOTIFICATIONS: Used solely to display the Android system media playback notification and lock-screen transport controls during playback. No marketing or push notifications are ever sent.
+
+6. Clipboard Usage
+When you tap a song title, artist name, or song history item, the App copies the selected "Artist - Title" text to your device clipboard at your explicit action. The App never reads from your clipboard.
+
+7. Children's Privacy
+Chilltrax does not knowingly collect any personal information from anyone, including children under the age of 13 (or the applicable age of digital consent in your jurisdiction).
+
+8. Changes to This Privacy Policy
+We may update this Privacy Policy from time to time to reflect changes to the App or regulatory requirements. Any updates will be published in the PRIVACY file in the project repository with an updated Effective Date.
+
+9. Contact Information
+If you have any questions or concerns about this Privacy Policy or the App's privacy practices, please contact:
+
+Lucian Marin
+Gmail: marin.lucian
+Phone: +40 726 210 589
